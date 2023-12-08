@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1024867182845",
+    "project_id": "sociallogin-da408",
+    "storage_bucket": "sociallogin-da408.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1024867182845:android:a3dfc7d0a0a1d5c698b694",
+        "android_client_info": {
+          "package_name": "com.example.flutter_firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1024867182845-t7rvq2eangdev1d6acdsk9sneumfe0ut.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.flutter_firebase",
+            "certificate_hash": "350ef153c28217566b7810645b108d04816dc6f9"
+          }
+        },
+        {
+          "client_id": "1024867182845-5s0fu8o4ejpc8jllg6g1t4v3nn7rpiku.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBn22rSMYDL8lTdWtT3rWp1fKUwCmYLJVU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1024867182845-5s0fu8o4ejpc8jllg6g1t4v3nn7rpiku.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
