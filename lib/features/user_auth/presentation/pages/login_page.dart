@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text("Login"),
+        title: Text("Social Login App"),
       ),
       body: Center(
         child: Padding(
@@ -47,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "Login",
+                "Login here!",
                 style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
               ),
               SizedBox(
@@ -92,9 +92,10 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 10,),
+              SizedBox(height: 30,),
               GestureDetector(
                 onTap: () {
+                  
                   _signInWithGoogle();
 
                 },
@@ -126,7 +127,7 @@ class _LoginPageState extends State<LoginPage> {
 
 
               SizedBox(
-                height: 20,
+                height: 10,
               ),
 
               //facebook
@@ -163,8 +164,10 @@ class _LoginPageState extends State<LoginPage> {
 
 
               SizedBox(
-                height: 20,
+                height: 24,
               ),
+               //github
+             
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -222,10 +225,12 @@ class _LoginPageState extends State<LoginPage> {
 
 
   _signInWithGoogle()async{
+    
 
     final GoogleSignIn _googleSignIn = GoogleSignIn();
 
     try {
+      await _googleSignIn.signOut();
 
       final GoogleSignInAccount? googleSignInAccount = await _googleSignIn.signIn();
 
@@ -238,8 +243,17 @@ class _LoginPageState extends State<LoginPage> {
           accessToken: googleSignInAuthentication.accessToken,
         );
 
-        await _firebaseAuth.signInWithCredential(credential);
+       // Sign in with the Google credential
+      UserCredential userCredential = await _firebaseAuth.signInWithCredential(credential);
+
+      // Check if user sign-in was successful
+      if (userCredential.user != null) {
+        showToast(message: "User is successfully signed in with Google");
         Navigator.pushNamed(context, "/home");
+      } else {
+        showToast(message: "Google sign-in failed");
+        // Handle the case where Google sign-in failed
+      }
       }
 
     }catch(e) {
@@ -258,11 +272,22 @@ showToast(message: "some error occured $e");
   );
 
   final OAuthCredential credential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
-  await _firebaseAuth.signInWithCredential(credential);
-  Navigator.pushNamed(context, "/home");
+  UserCredential userCredential=await _firebaseAuth.signInWithCredential(credential);
+  // Check if user sign-in was successful
+      if (userCredential.user != null) {
+        showToast(message: "User is successfully signed in with Facebook");
+        Navigator.pushNamed(context, "/home");
+      } else {
+        showToast(message: "Facebook sign-in failed");
+        // Handle the case where Google sign-in failed
+      }
+      }
+    
+  
 }
+
+
 
   
 
 
-}
