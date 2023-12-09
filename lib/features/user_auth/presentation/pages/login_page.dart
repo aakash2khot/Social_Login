@@ -1,3 +1,4 @@
+// Import necessary packages and dependencies
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 
 import '../../firebase_auth_implementation/firebase_auth_services.dart';
 
+// Define the LoginPage widget
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -19,13 +21,20 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
+// Define the state for the LoginPage
 class _LoginPageState extends State<LoginPage> {
+  // Boolean flag to track if the user is currently signing in
   bool _isSigning = false;
+
+  // Instances of FirebaseAuthService and FirebaseAuth
   final FirebaseAuthService _auth = FirebaseAuthService();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
+  // Controllers for handling email and password input
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
+  // Dispose method to clean up resources when the widget is disposed
   @override
   void dispose() {
     _emailController.dispose();
@@ -33,6 +42,7 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
+  // Build method to construct the UI of the LoginPage
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,6 +63,7 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 height: 30,
               ),
+              // FormContainerWidget for email input
               FormContainerWidget(
                 controller: _emailController,
                 hintText: "Email",
@@ -61,6 +72,7 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 height: 10,
               ),
+              // FormContainerWidget for password input
               FormContainerWidget(
                 controller: _passwordController,
                 hintText: "Password",
@@ -69,6 +81,7 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 height: 30,
               ),
+              // GestureDetector for tapping on the Login button
               GestureDetector(
                 onTap: () {
                   _signIn();
@@ -93,11 +106,10 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               SizedBox(height: 30,),
+              // GestureDetector for tapping on the Google Sign-In button
               GestureDetector(
                 onTap: () {
-                  
                   _signInWithGoogle();
-
                 },
                 child: Container(
                   width: double.infinity,
@@ -124,17 +136,13 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-
-
               SizedBox(
                 height: 10,
               ),
-
-              //facebook
+              // GestureDetector for tapping on the Facebook Sign-In button
               GestureDetector(
                 onTap: () {
                   _signInWithFacebook();
-
                 },
                 child: Container(
                   width: double.infinity,
@@ -161,14 +169,10 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-
-
               SizedBox(
                 height: 24,
               ),
-               //github
-             
-
+              // Row for suggesting to sign up if not registered
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -178,6 +182,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   GestureDetector(
                     onTap: () {
+                      // Navigate to the SignUpPage
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(builder: (context) => SignUpPage()),
@@ -201,93 +206,92 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  // Method to handle the user sign-in process
   void _signIn() async {
+    // Set the flag to indicate signing in
     setState(() {
       _isSigning = true;
     });
 
+    // Get email and password from controllers
     String email = _emailController.text;
     String password = _passwordController.text;
 
+    // Sign in with email and password
     User? user = await _auth.signInWithEmailAndPassword(email, password);
 
+    // Reset the flag after sign-in attempt
     setState(() {
       _isSigning = false;
     });
 
+    // Check if sign-in was successful and navigate to home page
     if (user != null) {
       showToast(message: "User is successfully signed in");
       Navigator.pushNamed(context, "/home");
     } else {
-      showToast(message: "some error occured");
+      showToast(message: "Some error occurred");
     }
   }
 
-
-  _signInWithGoogle()async{
-    
-
+  // Method to handle Google sign-in
+  _signInWithGoogle() async {
     final GoogleSignIn _googleSignIn = GoogleSignIn();
 
     try {
+      // Sign out from Google to ensure a clean sign-in process
       await _googleSignIn.signOut();
 
+      // Initiate Google sign-in
       final GoogleSignInAccount? googleSignInAccount = await _googleSignIn.signIn();
 
-      if(googleSignInAccount != null ){
-        final GoogleSignInAuthentication googleSignInAuthentication = await
-        googleSignInAccount.authentication;
+      // Check if Google sign-in was successful
+      if (googleSignInAccount != null) {
+        final GoogleSignInAuthentication googleSignInAuthentication =
+        await googleSignInAccount.authentication;
 
         final AuthCredential credential = GoogleAuthProvider.credential(
           idToken: googleSignInAuthentication.idToken,
           accessToken: googleSignInAuthentication.accessToken,
         );
 
-       // Sign in with the Google credential
-      UserCredential userCredential = await _firebaseAuth.signInWithCredential(credential);
+        // Sign in with the Google credential
+        UserCredential userCredential = await _firebaseAuth.signInWithCredential(credential);
 
-      // Check if user sign-in was successful
-      if (userCredential.user != null) {
-        showToast(message: "User is successfully signed in with Google");
-        Navigator.pushNamed(context, "/home");
-      } else {
-        showToast(message: "Google sign-in failed");
-        // Handle the case where Google sign-in failed
+        // Check if user sign-in was successful
+        if (userCredential.user != null) {
+          showToast(message: "User is successfully signed in with Google");
+          Navigator.pushNamed(context, "/home");
+        } else {
+          showToast(message: "Google sign-in failed");
+          // Handle the case where Google sign-in failed
+        }
       }
-      }
-
-    }catch(e) {
-showToast(message: "some error occured $e");
+    } catch (e) {
+      showToast(message: "Some error occurred $e");
     }
-
-
   }
 
+  // Method to handle Facebook sign-in
   _signInWithFacebook() async {
-  
-  final LoginResult loginResult = await FacebookAuth.instance.login(
-    permissions: [
-      'email'
-    ]
-  );
+    // Perform Facebook login with specified permissions
+    final LoginResult loginResult = await FacebookAuth.instance.login(
+        permissions: ['email']
+    );
 
-  final OAuthCredential credential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
-  UserCredential userCredential=await _firebaseAuth.signInWithCredential(credential);
-  // Check if user sign-in was successful
-      if (userCredential.user != null) {
-        showToast(message: "User is successfully signed in with Facebook");
-        Navigator.pushNamed(context, "/home");
-      } else {
-        showToast(message: "Facebook sign-in failed");
-        // Handle the case where Google sign-in failed
-      }
-      }
-    
-  
+    // Obtain OAuth credential from Facebook login result
+    final OAuthCredential credential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
+
+    // Sign in with the Facebook credential
+    UserCredential userCredential = await _firebaseAuth.signInWithCredential(credential);
+
+    // Check if user sign-in was successful
+    if (userCredential.user != null) {
+      showToast(message: "User is successfully signed in with Facebook");
+      Navigator.pushNamed(context, "/home");
+    } else {
+      showToast(message: "Facebook sign-in failed");
+      // Handle the case where Facebook sign-in failed
+    }
+  }
 }
-
-
-
-  
-
-

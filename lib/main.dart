@@ -7,8 +7,11 @@ import 'package:flutter_firebase/features/user_auth/presentation/pages/home_page
 import 'package:flutter_firebase/features/user_auth/presentation/pages/login_page.dart';
 import 'package:flutter_firebase/features/user_auth/presentation/pages/sign_up_page.dart';
 
+// Main function to run the app
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialize Firebase for web or other platforms
   if (kIsWeb) {
     await Firebase.initializeApp(
       options: FirebaseOptions(
@@ -22,19 +25,21 @@ Future main() async {
   } else {
     await Firebase.initializeApp();
   }
+
+  // Run the app
   runApp(MyApp());
 }
 
+// MyApp class, extending StatelessWidget
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Social Login',
       routes: {
         '/': (context) => SplashScreen(
-          // Here, you can decide whether to show the LoginPage or HomePage based on user authentication
+          // Decide whether to show the LoginPage or HomePage based on user authentication
           child: LoginPage(),
         ),
         '/login': (context) => LoginPage(),
