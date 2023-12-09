@@ -1,16 +1,9 @@
-# flutter_firebase
+# Social Login App
 
-A new Flutter project.
+Embark on a secure and user-friendly authentication journey with our Android Social Log-in App. Powered by Flutter and Firebase, it seamlessly integrates OAUTH 2.0 for Google and Facebook sign-ins, offering a versatile yet straightforward experience.
 
-## Getting Started
+## Setup
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. Clone the repo using the command : git clone https://github.com/aakash2khot/Social_Login.git
+2. Make sure that flutter is installed in your system, Android studio or any other editor is installed, Vscode for plugins (mostly to resolve dependencies and installations in pubsec.yml)
+3. 
